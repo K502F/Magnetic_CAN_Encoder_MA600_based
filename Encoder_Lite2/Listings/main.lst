@@ -1,0 +1,330 @@
+C251 COMPILER V5.60.0,  main                                                               14/01/26  22:35:40  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE main
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: C:\Users\js li\AppData\Local\Keil_v5_C251\C251\BIN\C251.EXE Sources\main.c XSMALL BROWSE INCDIR(.\S
+                    -ources\inc) DEBUG PRINT(.\Listings\main.lst) TABS(2) OBJECT(.\Objects\main.obj) 
+
+stmt  level    source
+
+    1          //<<AICUBE_USER_HEADER_REMARK_BEGIN>>
+    2          ////////////////////////////////////////
+    3          // 在此添加用户文件头说明信息  
+    4          // 文件名称: main.c
+    5          // 文件描述: 
+    6          // 文件版本: V1.0
+    7          // 修改记录:
+    8          //   1. (2026-01-10) 创建文件
+    9          ////////////////////////////////////////
+   10          //<<AICUBE_USER_HEADER_REMARK_END>>
+   11          
+   12          
+   13          #include "config.h"                     //默认已包含stdio.h、intrins.h等头文件
+   14          
+   15          
+   16          //<<AICUBE_USER_INCLUDE_BEGIN>>
+   17          // 在此添加用户头文件包含  
+   18          //<<AICUBE_USER_INCLUDE_END>>
+   19          
+   20          
+   21          //<<AICUBE_USER_GLOBAL_DEFINE_BEGIN>>
+   22          // 在此添加用户全局变量定义、用户宏定义以及函数声明  
+   23          #define SS P22
+   24          #define CAN_id 0xD4
+   25          extern uint8_t SPI_ReadByte00(void);
+   26          void SSPI_Init(void);
+   27          //<<AICUBE_USER_GLOBAL_DEFINE_END>>
+   28          
+   29          
+   30          
+   31          ////////////////////////////////////////
+   32          // 项目主函数
+   33          // 入口参数: 无
+   34          // 函数返回: 无
+   35          ////////////////////////////////////////
+   36          void main(void)
+   37          {
+   38   1          //<<AICUBE_USER_MAIN_INITIAL_BEGIN>>
+   39   1          // 在此添加用户主函数初始化代码  
+   40   1          //<<AICUBE_USER_MAIN_INITIAL_END>>
+   41   1      
+   42   1          SYS_Init();
+   43   1      
+   44   1          //<<AICUBE_USER_MAIN_CODE_BEGIN>>
+   45   1          // 在此添加主函数中运行一次的用户代码
+   46   1             SS=1;
+   47   1        P20=1;
+   48   1        SSPI_Init();
+   49   1          //<<AICUBE_USER_MAIN_CODE_END>>
+   50   1      
+   51   1          while (1)
+   52   1          {
+   53   2              //<<AICUBE_USER_MAIN_LOOP_BEGIN>>
+   54   2              // 在此添加主函数中用户主循环代码  
+   55   2              //<<AICUBE_USER_MAIN_LOOP_END>>
+   56   2          }
+   57   1      }
+   58          
+C251 COMPILER V5.60.0,  main                                                               14/01/26  22:35:40  PAGE 2   
+
+   59          ////////////////////////////////////////
+   60          // 系统初始化函数
+   61          // 入口参数: 无
+   62          // 函数返回: 无
+   63          ////////////////////////////////////////
+   64          void SYS_Init(void)
+   65          {
+   66   1          EnableAccessXFR();                  //使能访问扩展XFR
+   67   1          AccessCodeFastest();                //设置最快速度访问程序代码
+   68   1          AccessIXramFastest();               //设置最快速度访问内部XDATA
+   69   1          IAP_SetTimeBase();                  //设置IAP等待参数,产生1us时基
+   70   1      
+   71   1          //<<AICUBE_USER_PREINITIAL_CODE_BEGIN>>
+   72   1          // 在此添加用户预初始化代码  
+   73   1          //<<AICUBE_USER_PREINITIAL_CODE_END>>
+   74   1      
+   75   1          P0M0 = 0x00; P0M1 = 0x00;           //初始化P0口为准双向口模式
+   76   1          P1M0 = 0x00; P1M1 = 0x00;           //初始化P1口为准双向口模式
+   77   1          P2M0 = 0x00; P2M1 = 0x00;           //初始化P2口为准双向口模式
+   78   1          P3M0 = 0x00; P3M1 = 0x00;           //初始化P3口为准双向口模式
+   79   1          P4M0 = 0x00; P4M1 = 0x00;           //初始化P4口为准双向口模式
+   80   1          P5M0 = 0x00; P5M1 = 0x00;           //初始化P5口为准双向口模式
+   81   1          P6M0 = 0x00; P6M1 = 0x00;           //初始化P6口为准双向口模式
+   82   1          P7M0 = 0x00; P7M1 = 0x00;           //初始化P7口为准双向口模式
+   83   1      
+   84   1          PORT0_Init();                       //P0口初始化
+   85   1          PORT2_Init();                       //P2口初始化
+   86   1          CLK_Init();                         //时钟模块初始化
+   87   1          TIMER0_Init();                      //定时器0初始化
+   88   1          SSPI_Init();                         //SPI初始化
+   89   1          CAN1_Init();                        //CAN1初始化
+   90   1          MATHLIB_Init();                     //MATH库初始化
+   91   1      
+   92   1          //<<AICUBE_USER_INITIAL_CODE_BEGIN>>
+   93   1          // 在此添加用户初始化代码  
+   94   1          //<<AICUBE_USER_INITIAL_CODE_END>>
+   95   1      
+   96   1          EnableGlobalInt();                  //使能全局中断
+   97   1      }
+   98          
+   99          ////////////////////////////////////////
+  100          // 微秒延时函数
+  101          // 入口参数: us (设置延时的微秒值)
+  102          // 函数返回: 无
+  103          ////////////////////////////////////////
+  104          void delay_us(uint16_t us)
+  105          {
+  106   1          do
+  107   1          {
+  108   2              NOP(18);                        //(MAIN_Fosc + 500000) / 1000000 - 6
+  109   2          } while (--us);
+  110   1      }
+  111          
+  112          
+  113          ////////////////////////////////////////
+  114          // 毫秒延时函数
+  115          // 入口参数: ms (设置延时的毫秒值)
+  116          // 函数返回: 无
+  117          ////////////////////////////////////////
+  118          void delay_ms(uint16_t ms)
+  119          {
+  120   1          uint16_t i;
+  121   1      
+  122   1          do
+  123   1          {
+  124   2              i = MAIN_Fosc / 6000;
+C251 COMPILER V5.60.0,  main                                                               14/01/26  22:35:40  PAGE 3   
+
+  125   2              while (--i);
+  126   2          } while (--ms);
+  127   1      }
+  128          
+  129          
+  130          //<<AICUBE_USER_FUNCTION_IMPLEMENT_BEGIN>>
+  131          // 在此添加用户函数实现代码  
+  132          sbit CS_PIN = P2^2;    // ????
+  133          sbit MOSI_PIN = P2^3;  // ????
+  134          sbit MISO_PIN = P2^4;  // ????
+  135          sbit SCK_PIN = P2^5;   // ????
+  136          
+  137          
+  138          CAN_DataDef CAN_Data;
+  139          float Single_Rad,Multi_Rad,Last_Multi_Rad;
+  140          uint16_t Single_Rad_16,Omega_16;
+  141          int16_t Multi_Rad_16;
+  142          struct angle_raw_t{
+  143            uint16_t angle;
+  144            int32_t multi_angle;
+  145          };
+  146          struct angle_raw_t raw_angles;
+  147          void SSPI_Init(void)
+  148          {
+  149   1          // ??SPI??
+  150   1         
+  151   1          
+  152   1          // ???????
+  153   1          CS_PIN = 1;     // ?????,???
+  154   1          SCK_PIN = 1;    // ??3:?????????
+  155   1          MOSI_PIN = 1;   // MOSI?????
+  156   1      }
+  157          
+  158          // SPI??????
+  159          unsigned short SPI_ReadWord(void)
+  160          {
+  161   1          unsigned short i, dat = 0;
+  162   1        CS_PIN=0;
+  163   1          MOSI_PIN=0;
+  164   1          for(i = 0; i < 16; i++)
+  165   1          {
+  166   2              // ???????(??3:??????????)
+  167   2              SCK_PIN = 0;
+  168   2              _nop_();
+  169   2              _nop_();
+  170   2              
+  171   2              // ??MISO??
+  172   2              dat <<= 1;
+  173   2              if(MISO_PIN)
+  174   2                  dat |= 0x01;
+  175   2              
+  176   2              // ???(??3:??????????)
+  177   2              SCK_PIN = 1;
+  178   2              _nop_();
+  179   2              _nop_();
+  180   2          }
+  181   1          CS_PIN=1;
+  182   1          return dat;
+  183   1      }
+  184          unsigned short SPI_ReadLong(void)
+  185          {
+  186   1          unsigned long i, dat = 0;
+  187   1        CS_PIN=0;
+  188   1          MOSI_PIN=0;
+  189   1          for(i = 0; i < 32; i++)
+  190   1          {
+C251 COMPILER V5.60.0,  main                                                               14/01/26  22:35:40  PAGE 4   
+
+  191   2              // ???????(??3:??????????)
+  192   2              SCK_PIN = 0;
+  193   2              _nop_();
+  194   2              _nop_();
+  195   2              
+  196   2              // ??MISO??
+  197   2              dat <<= 1;
+  198   2              if(MISO_PIN)
+  199   2                  dat |= 0x01;
+  200   2              
+  201   2              // ???(??3:??????????)
+  202   2              SCK_PIN = 1;
+  203   2              _nop_();
+  204   2              _nop_();
+  205   2          }
+  206   1          CS_PIN=1;
+  207   1          return dat<<16;
+*** WARNING C208 IN LINE 207 OF Sources\main.c: '<<': shift factor out of range, truncated
+  208   1      }
+  209          void CAN_Send(uint8_t CANx,uint32_t canid,uint8_t* datagram){
+  210   1        int i=0;
+  211   1        
+  212   1        CAN_Data.DLC=8;
+  213   1        CAN_Data.RTR=0;
+  214   1        CAN_Data.FF=0;
+  215   1        CAN_Data.ID=canid;
+  216   1        for(i=0;i<=7;i++){
+  217   2          CAN_Data.DataBuffer[i]=datagram[i];
+  218   2        }
+  219   1        CAN_SendMsg(CANx,&CAN_Data);
+  220   1        
+  221   1      }
+  222          uint16_t SPI_Read_MA600_Angle(){
+  223   1        uint8_t SPI_Buffer_2[2];
+  224   1        uint16_t angle_out=0;
+  225   1        angle_out=SPI_ReadWord();
+  226   1        return angle_out;
+  227   1      }
+*** WARNING C47 IN LINE 223 OF Sources\main.c: 'SPI_Buffer_2': unreferenced local variable
+  228          int32_t SPI_Read_MA600_Multi_Angle(){
+  229   1        uint8_t SPI_Buffer_2[2];
+  230   1        uint32_t multiangle_out=0;
+  231   1        multiangle_out=SPI_ReadLong()*65536+SPI_Read_MA600_Angle();
+  232   1        return (int32_t)multiangle_out;
+  233   1      }
+*** WARNING C47 IN LINE 229 OF Sources\main.c: 'SPI_Buffer_2': unreferenced local variable
+  234          
+  235          int32_t last_composite_angle=0;
+  236          int16_t tmr_cycles=0;
+  237          void Task_TMR0(){
+  238   1      
+  239   1        int32_t composite_angle_diff=0;
+  240   1        int32_t angle_rad100=0;
+  241   1        int32_t composite_angle_rad100=0;
+  242   1        int32_t omega_rad100=0;
+  243   1        uint8_t CAN1_TX_Data[8];
+  244   1        WDT_Clear();
+  245   1        if(tmr_cycles<=(CAN_id&0x0f)*200){
+  246   2          if(tmr_cycles%160<=0){
+  247   3        P20=1;
+  248   3        }
+  249   2        else{
+  250   3          P20=0;
+  251   3        }
+  252   2        }else{
+  253   2          P20=0;
+C251 COMPILER V5.60.0,  main                                                               14/01/26  22:35:40  PAGE 5   
+
+  254   2        }
+  255   1        if(tmr_cycles>1000){
+  256   2          tmr_cycles=0;
+  257   2        }
+  258   1        tmr_cycles++;
+  259   1        
+  260   1        //Angle Readings
+  261   1        raw_angles.angle=SPI_Read_MA600_Angle();
+  262   1        raw_angles.multi_angle=SPI_Read_MA600_Multi_Angle();
+  263   1        Single_Rad=(raw_angles.angle/65536.0)*6.28;
+  264   1        Multi_Rad=(raw_angles.multi_angle/65536.0)*6.28;//(raw_angles.multiturn*6.28)+Single_Rad;
+  265   1          while(Single_Rad > 3.14){
+  266   2          Single_Rad -= 6.28;
+  267   2        }
+  268   1        Single_Rad_16 = Single_Rad * 100.0f;
+  269   1        Multi_Rad_16= Multi_Rad  * 100.0f;
+  270   1        Omega_16 = (Multi_Rad-Last_Multi_Rad) *1000.0f * 100.0f;
+  271   1        Last_Multi_Rad=Multi_Rad;
+  272   1        CAN1_TX_Data[0]=0xA5;
+  273   1        CAN1_TX_Data[7]=0xB5;
+  274   1        CAN1_TX_Data[1]=Single_Rad_16&0x00ff;
+  275   1        CAN1_TX_Data[2]=Single_Rad_16/256;
+  276   1        CAN1_TX_Data[3]=Multi_Rad_16&0x00ff;
+  277   1        CAN1_TX_Data[4]=Multi_Rad_16/256;
+  278   1        CAN1_TX_Data[5]=Omega_16&0x00ff;
+  279   1        CAN1_TX_Data[6]=Omega_16>>8;
+  280   1        CAN_Send(CAN1,CAN_id,CAN1_TX_Data);
+  281   1      }
+  282          
+  283          //<<AICUBE_USER_FUNCTION_IMPLEMENT_END>>
+  284          
+  285          
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =       633     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =        43          8
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =        16     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  3 WARNING(S),  0 ERROR(S)

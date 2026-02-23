@@ -1,0 +1,125 @@
+C251 COMPILER V5.60.0,  spi                                                                14/01/26  22:35:40  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE spi
+OBJECT MODULE PLACED IN .\Objects\spi.obj
+COMPILER INVOKED BY: C:\Users\js li\AppData\Local\Keil_v5_C251\C251\BIN\C251.EXE Sources\spi.c XSMALL BROWSE INCDIR(.\So
+                    -urces\inc) DEBUG PRINT(.\Listings\spi.lst) TABS(2) OBJECT(.\Objects\spi.obj) 
+
+stmt  level    source
+
+    1          //<<AICUBE_USER_HEADER_REMARK_BEGIN>>
+    2          ////////////////////////////////////////
+    3          // 在此添加用户文件头说明信息  
+    4          // 文件名称: spi.c
+    5          // 文件描述: 
+    6          // 文件版本: V1.0
+    7          // 修改记录:
+    8          //   1. (2026-01-10) 创建文件
+    9          ////////////////////////////////////////
+   10          //<<AICUBE_USER_HEADER_REMARK_END>>
+   11          
+   12          
+   13          #include "config.h"
+   14          
+   15          
+   16          //<<AICUBE_USER_INCLUDE_BEGIN>>
+   17          // 在此添加用户头文件包含  
+   18          //<<AICUBE_USER_INCLUDE_END>>
+   19          
+   20          
+   21          //<<AICUBE_USER_GLOBAL_DEFINE_BEGIN>>
+   22          // 在此添加用户全局变量定义、用户宏定义以及函数声明  
+   23          //<<AICUBE_USER_GLOBAL_DEFINE_END>>
+   24          
+   25          
+   26          
+   27          ////////////////////////////////////////
+   28          // SPI初始化函数
+   29          // 入口参数: 无
+   30          // 函数返回: 无
+   31          ////////////////////////////////////////
+   32          void SPI_Init(void)
+   33          {
+   34   1          SPI_SwitchP2n();                    //选择SPI数据口: SS(P2.2), MOSI(P2.3), MISO(P2.4), SCLK(P2.5)
+   35   1      
+   36   1          SPI_MasterMode();                   //设置SPI为主机模式
+   37   1          SPI_IgnoreSS();                     //忽略SS脚
+   38   1          SPI_DataMSB();                      //设置SPI数据顺序为MSB (高位在前)
+   39   1          SPI_SetMode0();                     //设置SPI工作模式0 (CPOL=0, CPHA=0)
+   40   1          SPI_SetClockDivider2();             //设置SPI时钟分频
+   41   1      
+   42   1          HSSPI_Disable();                    //关闭SPI高速模式
+   43   1      
+   44   1          SPI_Enable();                       //使能SPI功能
+   45   1      
+   46   1          //<<AICUBE_USER_SPI_INITIAL_BEGIN>>
+   47   1          // 在此添加用户初始化代码  
+   48   1          //<<AICUBE_USER_SPI_INITIAL_END>>
+   49   1      }
+   50          
+   51          ////////////////////////////////////////
+   52          // SPI主机模式发送字节函数
+   53          // 入口参数: dat (待发送的字节数据)
+   54          // 函数返回: 无
+   55          ////////////////////////////////////////
+   56          void SPI_WriteByte(uint8_t dat)
+   57          {
+   58   1          SPI_SendData(dat);                  //触发主机发送数据
+C251 COMPILER V5.60.0,  spi                                                                14/01/26  22:35:40  PAGE 2   
+
+   59   1          while (!SPI_CheckFlag());           //等待发送完成
+   60   1          SPI_ClearFlag();                    //清除中断标志
+   61   1      }
+   62          
+   63          ////////////////////////////////////////
+   64          // SPI主机模式读取字节函数
+   65          // 入口参数: 无
+   66          // 函数返回: 读取的字节数据
+   67          ////////////////////////////////////////
+   68          uint8_t SPI_ReadByte(void)
+   69          {
+   70   1          SPI_SendData(0xff);                 //触发主机读取数据（主机发送时钟信号）
+   71   1          while (!SPI_CheckFlag());           //等待读取完成
+   72   1          SPI_ClearFlag();                    //清除中断标志
+   73   1          return SPI_ReadData();
+   74   1      }
+   75          
+   76          
+   77          
+   78          //<<AICUBE_USER_FUNCTION_IMPLEMENT_BEGIN>>
+   79          // 在此添加用户函数实现代码  
+   80          uint8_t SPI_ReadByte00(void)
+   81          {
+   82   1          SPI_SendData(0x00);                 //触发主机读取数据（主机发送时钟信号）
+   83   1          while (!SPI_CheckFlag());           //等待读取完成
+   84   1          SPI_ClearFlag();                    //清除中断标志
+   85   1          return SPI_ReadData();
+   86   1      }
+   87          //<<AICUBE_USER_FUNCTION_IMPLEMENT_END>>
+   88          
+   89          
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =        88     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =    ------     ------
+  bit size             =    ------     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =    ------     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)

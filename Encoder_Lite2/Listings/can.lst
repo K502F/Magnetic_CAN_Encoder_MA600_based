@@ -1,0 +1,291 @@
+C251 COMPILER V5.60.0,  can                                                                14/01/26  22:35:41  PAGE 1   
+
+
+C251 COMPILER V5.60.0, COMPILATION OF MODULE can
+OBJECT MODULE PLACED IN .\Objects\can.obj
+COMPILER INVOKED BY: C:\Users\js li\AppData\Local\Keil_v5_C251\C251\BIN\C251.EXE Sources\can.c XSMALL BROWSE INCDIR(.\So
+                    -urces\inc) DEBUG PRINT(.\Listings\can.lst) TABS(2) OBJECT(.\Objects\can.obj) 
+
+stmt  level    source
+
+    1          //<<AICUBE_USER_HEADER_REMARK_BEGIN>>
+    2          ////////////////////////////////////////
+    3          // 在此添加用户文件头说明信息  
+    4          // 文件名称: can.c
+    5          // 文件描述: 
+    6          // 文件版本: V1.0
+    7          // 修改记录:
+    8          //   1. (2026-01-10) 创建文件
+    9          ////////////////////////////////////////
+   10          //<<AICUBE_USER_HEADER_REMARK_END>>
+   11          
+   12          
+   13          #include "config.h"
+   14          
+   15          
+   16          //<<AICUBE_USER_INCLUDE_BEGIN>>
+   17          // 在此添加用户头文件包含  
+   18          //<<AICUBE_USER_INCLUDE_END>>
+   19          
+   20          
+   21          //<<AICUBE_USER_GLOBAL_DEFINE_BEGIN>>
+   22          // 在此添加用户全局变量定义、用户宏定义以及函数声明  
+   23          //<<AICUBE_USER_GLOBAL_DEFINE_END>>
+   24          
+   25          
+   26          BOOL fCAN1SendBusy;                     //发送FIFO中的CAN数据包发送忙标志
+   27          BOOL fCAN1ReadyRead;                    //接收FIFO中有待读取的CAN数据包标志
+   28          
+   29          ////////////////////////////////////////
+   30          // CAN1初始化函数
+   31          // 入口参数: 无
+   32          // 函数返回: 无
+   33          ////////////////////////////////////////
+   34          void CAN1_Init(void)
+   35          {
+   36   1      #define CAN1_BAUDRATE           (1000)
+   37   1      #define CAN1_SJW                (0)
+   38   1      #define CAN1_BRP                (0)
+   39   1      #define CAN1_TSG1               (8)
+   40   1      #define CAN1_TSG2               (1)
+   41   1      #define CAN1_ACR                (0x00000000)
+   42   1      #define CAN1_AMR                (0x00000000)
+   43   1      
+   44   1          CAN1_Enable();                      //使能CAN1功能
+   45   1      
+   46   1          CAN1_SwitchP0001();                 //选择CAN1数据口: CANRX (P0.0), CANTX (P0.1)
+   47   1      
+   48   1          CAN1_SEL();                         //选择CAN1模块
+   49   1          CAN_EnterResetMode();               //进入复位模式，开始对CAN模块进行初始化
+   50   1      
+   51   1          CAN_NormalMode();                   //CAN模块为普通工作模式
+   52   1          CAN_DoubleFilter();                 //CAN模块使用双过滤设置
+   53   1      
+   54   1          CAN_SetSJW(CAN1_SJW);               //设置重新同步跳跃宽度
+   55   1          CAN_SetBRP(CAN1_BRP);               //设置CAN波特率分频系数
+   56   1          CAN_SetTSG1(CAN1_TSG1);             //设置同步采样段1
+   57   1          CAN_SetTSG2(CAN1_TSG2);             //设置同步采样段2
+   58   1          CAN_SampleOnce();                   //总线电平采样1次
+C251 COMPILER V5.60.0,  can                                                                14/01/26  22:35:41  PAGE 2   
+
+   59   1      
+   60   1          CAN_SetACR0(BYTE3(CAN1_ACR));       //设置验收代码寄存器
+   61   1          CAN_SetACR1(BYTE2(CAN1_ACR));       //设置验收代码寄存器
+   62   1          CAN_SetACR2(BYTE1(CAN1_ACR));       //设置验收代码寄存器
+   63   1          CAN_SetACR3(BYTE0(CAN1_ACR));       //设置验收代码寄存器
+   64   1          CAN_SetAMR0(BYTE3(CAN1_AMR));       //设置验收屏蔽寄存器
+   65   1          CAN_SetAMR1(BYTE2(CAN1_AMR));       //设置验收屏蔽寄存器
+   66   1          CAN_SetAMR2(BYTE1(CAN1_AMR));       //设置验收屏蔽寄存器
+   67   1          CAN_SetAMR3(BYTE0(CAN1_AMR));       //设置验收屏蔽寄存器
+   68   1      
+   69   1          CAN_ClearFlags(0xff);               //清除全部中断标志位
+   70   1          CAN_EnableArbitrateLostInt();       //使能仲裁丢失中断
+   71   1          CAN_EnableErrorWarningInt();        //使能错误警告中断
+   72   1          CAN_EnableErrorPassiveInt();        //使能被动错误中断
+   73   1          CAN_EnableReceiveInt();             //使能接收中断
+   74   1          CAN_EnableTransmitInt();            //使能发送中断
+   75   1          CAN_EnableBusErrorInt();            //使能总线错误中断
+   76   1          CAN_EnableDataOverrunInt();         //使能接收溢出中断
+   77   1          CAN1_SetIntPriority(2);             //设置中断为较高优先级
+   78   1          CAN1_EnableInt();                   //使能CAN1中断
+   79   1          fCAN1SendBusy = 0;                  //清除CAN数据包发送忙标志
+   80   1          fCAN1ReadyRead = 0;                 //清除有待读取的CAN数据包标志
+   81   1      
+   82   1          CAN_ExitResetMode();                //退出复位模式，
+   83   1      
+   84   1          //<<AICUBE_USER_CAN1_INITIAL_BEGIN>>
+   85   1          // 在此添加用户初始化代码  
+   86   1          //<<AICUBE_USER_CAN1_INITIAL_END>>
+   87   1      }
+   88          
+   89          ////////////////////////////////////////
+   90          // 读取CAN缓冲区数据
+   91          // 入口参数: *pCAN: (存放CAN总线读取数据结构参数)
+   92          // 函数返回: 无
+   93          ////////////////////////////////////////
+   94          void CAN_ReadFIFO(CAN_DataDef *pCAN)
+   95          {
+   96   1          uint8_t index, i;
+   97   1          uint32_t id;
+   98   1      
+   99   1          *(uint8_t *)pCAN = CAN_ReadBUF0();  //读取帧格式和数据长度信息
+  100   1          if (pCAN->FF)                       //判断是标准帧还是扩展帧
+  101   1          {
+  102   2              id = CAN_ReadBUF1();            //扩展帧ID占4个字节
+  103   2              id = (id << 8) | CAN_ReadBUF2();
+  104   2              id = (id << 8) | CAN_ReadBUF3();
+  105   2              id = (id << 8) | CAN_ReadBUF0();
+  106   2              pCAN->ID = id >> 3;             //格式化后得到帧的ID
+  107   2              index = 1;
+  108   2          }
+  109   1          else
+  110   1          {
+  111   2              id = CAN_ReadBUF1();            //标准帧ID占2个字节
+  112   2              id = (id << 8) | CAN_ReadBUF2();
+  113   2              pCAN->ID = id >> 5;             //格式化后得到帧的ID
+  114   2              index = 3;
+  115   2          }
+  116   1      
+  117   1          for (i = 0; i < pCAN->DLC; i++)
+  118   1          {
+  119   2              if (i >= 8) break;              //数据最多不超过8字节
+  120   2              pCAN->DataBuffer[i] = CAN_ReadBUF(index++); //读取有效数据
+  121   2          }
+  122   1      
+  123   1          while (index & 3)                   //保证读取FIFO的数据长度为4的整倍数
+  124   1              i = CAN_ReadBUF(index++);       //读取冗余数据
+C251 COMPILER V5.60.0,  can                                                                14/01/26  22:35:41  PAGE 3   
+
+  125   1      }
+  126          
+  127          ////////////////////////////////////////
+  128          // 接收CAN消息
+  129          // 入口参数: *pCAN: (接收CAN消息缓冲区)
+  130          // 函数返回: 帧个数
+  131          ////////////////////////////////////////
+  132          uint8_t CAN_ReadMsg(uint8_t CANx, CAN_DataDef *pCAN)
+  133          {
+  134   1          uint8_t n = 0;
+  135   1      
+  136   1          if (CANx == CAN1)
+  137   1              CAN1_SEL();                     //选择CAN1模块
+  138   1          else if (CANx == CAN2)
+  139   1              CAN2_SEL();                     //选择CAN2模块
+  140   1          else
+  141   1              return (uint8_t)(-1);           //参数错误,直接退出
+  142   1      
+  143   1          do
+  144   1          {
+  145   2              CAN_ReadFIFO(pCAN++);           //读取接收缓冲区数据
+  146   2              n++;                            //帧个数+1
+  147   2          } while (CAN_CheckRBufferStatus()); //判断接收缓冲区里是否还有数据，有的话继续读取
+  148   1      
+  149   1          return n;                           //返回帧个数
+  150   1      }
+  151          
+  152          ////////////////////////////////////////
+  153          // CAN发送消息
+  154          // 入口参数: *pCAN: (发送CAN消息缓冲区)
+  155          // 函数返回: 无
+  156          ////////////////////////////////////////
+  157          void CAN_SendMsg(uint8_t CANx, CAN_DataDef *pCAN)
+  158          {
+  159   1          uint8_t index, i;
+  160   1          uint32_t id;
+  161   1      
+  162   1      
+  163   1          i = 200;
+  164   1          if (CANx == CAN1)
+  165   1              CAN1_SEL();                     //选择CAN1模块
+  166   1          else if (CANx == CAN2)
+  167   1              CAN2_SEL();                     //选择CAN2模块
+  168   1          else
+  169   1              return;                         //参数错误,直接退出
+  170   1      
+  171   1          i = 200;
+  172   1          if (CANx == CAN1)                   //判断当前的CAN模块
+  173   1              while ((--i) && (fCAN1SendBusy)); //等待CAN1上次发送完成
+  174   1      
+  175   1          if (pCAN->FF)                       //判断是否扩展帧
+  176   1          {
+  177   2              id = pCAN->ID << 3;
+  178   2              CAN_WriteBUF0(*(uint8_t*)pCAN); //将帧格式和数据长度信息写入CAN FIFO
+  179   2              CAN_WriteBUF1(BYTE3(id));
+  180   2              CAN_WriteBUF2(BYTE2(id));
+  181   2              CAN_WriteBUF3(BYTE1(id));
+  182   2              CAN_WriteBUF0(BYTE0(id));
+  183   2      
+  184   2              index = 1;
+  185   2          }
+  186   1          else                                //发送标准帧
+  187   1          {
+  188   2              id = pCAN->ID << 5;
+  189   2              CAN_WriteBUF0(*(uint8_t*)pCAN); //将帧格式和数据长度信息写入CAN FIFO
+  190   2              CAN_WriteBUF1(BYTE1(id));
+C251 COMPILER V5.60.0,  can                                                                14/01/26  22:35:41  PAGE 4   
+
+  191   2              CAN_WriteBUF2(BYTE0(id));
+  192   2      
+  193   2              index = 3;
+  194   2          }
+  195   1          for (i = 0; i < pCAN->DLC; i++)
+  196   1          {
+  197   2              if (i >= 8) break;              //数据最多不超过8字节
+  198   2              CAN_WriteBUF(index++, pCAN->DataBuffer[i]); //写数据到CAN FIFO
+  199   2          }
+  200   1          while (index & 3)                   //判断已读数据长度是否4的整数倍
+  201   1              CAN_WriteBUF(index++, 0);       //写冗余数据到CAN FIFO
+  202   1      
+  203   1          CAN_TriggerTransmit();              //发起一次帧传输,将CAN FIFO中的数据发送到CAN总线上
+  204   1      
+  205   1          if (CANx == CAN1)                   //判断当前的CAN模块
+  206   1              fCAN1SendBusy = 1;              //设置CAN1发送忙标志
+  207   1      
+  208   1      }
+  209          
+  210          
+  211          ////////////////////////////////////////
+  212          // CAN1中断服务程序
+  213          // 入口参数: 无
+  214          // 函数返回: 无
+  215          ////////////////////////////////////////
+  216          void CAN1_ISR(void) interrupt CAN1_VECTOR
+  217          {
+  218   1          //<<AICUBE_USER_CAN1_ISR_CODE1_BEGIN>>
+  219   1          // 在此添加中断函数用户代码  
+  220   1          uint8_t isr;
+  221   1          uint8_t aux;
+  222   1          uint8_t ar;
+  223   1      
+  224   1          ar = CANAR;                         //LINAR现场保护
+  225   1          aux = AUXR2;                        //AUXR2现场保护
+  226   1      
+  227   1          CAN1_SEL();                         //选择CAN1模块
+  228   1          isr = CAN_ReadIntStatus();          //读取中断标志位
+  229   1          CAN_ClearFlags(isr);                //写1清除中断标志位
+  230   1      
+  231   1          if (CAN_CheckReceive(isr))          //判断接收中断标志位
+  232   1          {
+  233   2              fCAN1ReadyRead = 1;             //设置CAN消息待读取标志
+  234   2          }
+  235   1          if (CAN_CheckBusError(isr))         //判断总线错误中断标志位
+  236   1          {
+  237   2          }
+  238   1      
+  239   1          AUXR2 = aux;                        //AUXR2现场恢复
+  240   1          CANAR = ar;                         //CANAR现场恢复
+  241   1          //<<AICUBE_USER_CAN1_ISR_CODE1_END>>
+  242   1      }
+  243          
+  244          
+  245          //<<AICUBE_USER_FUNCTION_IMPLEMENT_BEGIN>>
+  246          // 在此添加用户函数实现代码  
+  247          //<<AICUBE_USER_FUNCTION_IMPLEMENT_END>>
+  248          
+  249          
+
+
+Module Information          Static   Overlayable
+------------------------------------------------
+  code size            =      1184     ------
+  ecode size           =    ------     ------
+  data size            =    ------     ------
+  idata size           =    ------     ------
+C251 COMPILER V5.60.0,  can                                                                14/01/26  22:35:41  PAGE 5   
+
+  pdata size           =    ------     ------
+  xdata size           =    ------     ------
+  xdata-const size     =    ------     ------
+  edata size           =    ------          1
+  bit size             =         2     ------
+  ebit size            =    ------     ------
+  bitaddressable size  =    ------     ------
+  ebitaddressable size =    ------     ------
+  far data size        =    ------     ------
+  huge data size       =    ------     ------
+  const size           =    ------     ------
+  hconst size          =    ------     ------
+End of Module Information.
+
+
+C251 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
