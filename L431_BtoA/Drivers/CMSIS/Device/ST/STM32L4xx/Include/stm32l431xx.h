@@ -214,10 +214,10 @@ typedef struct
 
 typedef struct
 {
-  __IO uint32_t TIR;  /*!< CAN1 TX mailbox identifier register */
-  __IO uint32_t TDTR; /*!< CAN1 mailbox data length control and time stamp register */
-  __IO uint32_t TDLR; /*!< CAN1 mailbox data low register */
-  __IO uint32_t TDHR; /*!< CAN1 mailbox data high register */
+  __IO uint32_t TIR;  /*!< CAN TX mailbox identifier register */
+  __IO uint32_t TDTR; /*!< CAN mailbox data length control and time stamp register */
+  __IO uint32_t TDLR; /*!< CAN mailbox data low register */
+  __IO uint32_t TDHR; /*!< CAN mailbox data high register */
 } CAN_TxMailBox_TypeDef;
 
 /**
@@ -226,10 +226,10 @@ typedef struct
 
 typedef struct
 {
-  __IO uint32_t RIR;  /*!< CAN1 receive FIFO mailbox identifier register */
-  __IO uint32_t RDTR; /*!< CAN1 receive FIFO mailbox data length control and time stamp register */
-  __IO uint32_t RDLR; /*!< CAN1 receive FIFO mailbox data low register */
-  __IO uint32_t RDHR; /*!< CAN1 receive FIFO mailbox data high register */
+  __IO uint32_t RIR;  /*!< CAN receive FIFO mailbox identifier register */
+  __IO uint32_t RDTR; /*!< CAN receive FIFO mailbox data length control and time stamp register */
+  __IO uint32_t RDLR; /*!< CAN receive FIFO mailbox data low register */
+  __IO uint32_t RDHR; /*!< CAN receive FIFO mailbox data high register */
 } CAN_FIFOMailBox_TypeDef;
 
 /**
@@ -238,8 +238,8 @@ typedef struct
 
 typedef struct
 {
-  __IO uint32_t FR1; /*!< CAN1 Filter bank register 1 */
-  __IO uint32_t FR2; /*!< CAN1 Filter bank register 1 */
+  __IO uint32_t FR1; /*!< CAN Filter bank register 1 */
+  __IO uint32_t FR2; /*!< CAN Filter bank register 1 */
 } CAN_FilterRegister_TypeDef;
 
 /**
@@ -248,28 +248,28 @@ typedef struct
 
 typedef struct
 {
-  __IO uint32_t              MCR;                 /*!< CAN1 master control register,         Address offset: 0x00          */
-  __IO uint32_t              MSR;                 /*!< CAN1 master status register,          Address offset: 0x04          */
-  __IO uint32_t              TSR;                 /*!< CAN1 transmit status register,        Address offset: 0x08          */
-  __IO uint32_t              RF0R;                /*!< CAN1 receive FIFO 0 register,         Address offset: 0x0C          */
-  __IO uint32_t              RF1R;                /*!< CAN1 receive FIFO 1 register,         Address offset: 0x10          */
-  __IO uint32_t              IER;                 /*!< CAN1 interrupt enable register,       Address offset: 0x14          */
-  __IO uint32_t              ESR;                 /*!< CAN1 error status register,           Address offset: 0x18          */
-  __IO uint32_t              BTR;                 /*!< CAN1 bit timing register,             Address offset: 0x1C          */
+  __IO uint32_t              MCR;                 /*!< CAN master control register,         Address offset: 0x00          */
+  __IO uint32_t              MSR;                 /*!< CAN master status register,          Address offset: 0x04          */
+  __IO uint32_t              TSR;                 /*!< CAN transmit status register,        Address offset: 0x08          */
+  __IO uint32_t              RF0R;                /*!< CAN receive FIFO 0 register,         Address offset: 0x0C          */
+  __IO uint32_t              RF1R;                /*!< CAN receive FIFO 1 register,         Address offset: 0x10          */
+  __IO uint32_t              IER;                 /*!< CAN interrupt enable register,       Address offset: 0x14          */
+  __IO uint32_t              ESR;                 /*!< CAN error status register,           Address offset: 0x18          */
+  __IO uint32_t              BTR;                 /*!< CAN bit timing register,             Address offset: 0x1C          */
   uint32_t                   RESERVED0[88];       /*!< Reserved, 0x020 - 0x17F                                            */
-  CAN_TxMailBox_TypeDef      sTxMailBox[3];       /*!< CAN1 Tx MailBox,                      Address offset: 0x180 - 0x1AC */
-  CAN_FIFOMailBox_TypeDef    sFIFOMailBox[2];     /*!< CAN1 FIFO MailBox,                    Address offset: 0x1B0 - 0x1CC */
+  CAN_TxMailBox_TypeDef      sTxMailBox[3];       /*!< CAN Tx MailBox,                      Address offset: 0x180 - 0x1AC */
+  CAN_FIFOMailBox_TypeDef    sFIFOMailBox[2];     /*!< CAN FIFO MailBox,                    Address offset: 0x1B0 - 0x1CC */
   uint32_t                   RESERVED1[12];       /*!< Reserved, 0x1D0 - 0x1FF                                            */
-  __IO uint32_t              FMR;                 /*!< CAN1 filter master register,          Address offset: 0x200         */
-  __IO uint32_t              FM1R;                /*!< CAN1 filter mode register,            Address offset: 0x204         */
+  __IO uint32_t              FMR;                 /*!< CAN filter master register,          Address offset: 0x200         */
+  __IO uint32_t              FM1R;                /*!< CAN filter mode register,            Address offset: 0x204         */
   uint32_t                   RESERVED2;           /*!< Reserved, 0x208                                                    */
-  __IO uint32_t              FS1R;                /*!< CAN1 filter scale register,           Address offset: 0x20C         */
+  __IO uint32_t              FS1R;                /*!< CAN filter scale register,           Address offset: 0x20C         */
   uint32_t                   RESERVED3;           /*!< Reserved, 0x210                                                    */
-  __IO uint32_t              FFA1R;               /*!< CAN1 filter FIFO assignment register, Address offset: 0x214         */
+  __IO uint32_t              FFA1R;               /*!< CAN filter FIFO assignment register, Address offset: 0x214         */
   uint32_t                   RESERVED4;           /*!< Reserved, 0x218                                                    */
-  __IO uint32_t              FA1R;                /*!< CAN1 filter activation register,      Address offset: 0x21C         */
+  __IO uint32_t              FA1R;                /*!< CAN filter activation register,      Address offset: 0x21C         */
   uint32_t                   RESERVED5[8];        /*!< Reserved, 0x220-0x23F                                              */
-  CAN_FilterRegister_TypeDef sFilterRegister[28]; /*!< CAN1 Filter Register,                 Address offset: 0x240-0x31C   */
+  CAN_FilterRegister_TypeDef sFilterRegister[28]; /*!< CAN Filter Register,                 Address offset: 0x240-0x31C   */
 } CAN_TypeDef;
 
 
@@ -1060,7 +1060,7 @@ typedef struct
 #define I2C2                ((I2C_TypeDef *) I2C2_BASE)
 #define I2C3                ((I2C_TypeDef *) I2C3_BASE)
 #define CRS                 ((CRS_TypeDef *) CRS_BASE)
-#define CAN1                 ((CAN_TypeDef *) CAN1_BASE)
+#define CAN                 ((CAN_TypeDef *) CAN1_BASE)
 #define CAN1                ((CAN_TypeDef *) CAN1_BASE)
 #define PWR                 ((PWR_TypeDef *) PWR_BASE)
 #define DAC                 ((DAC_TypeDef *) DAC1_BASE)
@@ -2180,7 +2180,7 @@ typedef struct
 /*                         Controller Area Network                            */
 /*                                                                            */
 /******************************************************************************/
-/*!<CAN1 control and status registers */
+/*!<CAN control and status registers */
 /*******************  Bit definition for CAN_MCR register  ********************/
 #define CAN_MCR_INRQ_Pos       (0U)
 #define CAN_MCR_INRQ_Msk       (0x1UL << CAN_MCR_INRQ_Pos)                     /*!< 0x00000001 */
@@ -2237,7 +2237,7 @@ typedef struct
 #define CAN_MSR_SAMP           CAN_MSR_SAMP_Msk                                /*!<Last Sample Point */
 #define CAN_MSR_RX_Pos         (11U)
 #define CAN_MSR_RX_Msk         (0x1UL << CAN_MSR_RX_Pos)                       /*!< 0x00000800 */
-#define CAN_MSR_RX             CAN_MSR_RX_Msk                                  /*!<CAN1 Rx Signal */
+#define CAN_MSR_RX             CAN_MSR_RX_Msk                                  /*!<CAN Rx Signal */
 
 /*******************  Bit definition for CAN_TSR register  ********************/
 #define CAN_TSR_RQCP0_Pos      (0U)
@@ -2716,7 +2716,7 @@ typedef struct
 #define CAN_RDH1R_DATA7_Msk    (0xFFUL << CAN_RDH1R_DATA7_Pos)                 /*!< 0xFF000000 */
 #define CAN_RDH1R_DATA7        CAN_RDH1R_DATA7_Msk                             /*!<Data byte 7 */
 
-/*!<CAN1 filter registers */
+/*!<CAN filter registers */
 /*******************  Bit definition for CAN_FMR register  ********************/
 #define CAN_FMR_FINIT_Pos      (0U)
 #define CAN_FMR_FINIT_Msk      (0x1UL << CAN_FMR_FINIT_Pos)                    /*!< 0x00000001 */
@@ -14664,7 +14664,7 @@ typedef struct
 
 #define IS_ADC_COMMON_INSTANCE(INSTANCE) ((INSTANCE) == ADC1_COMMON)
 
-/******************************** CAN1 Instances ******************************/
+/******************************** CAN Instances ******************************/
 #define IS_CAN_ALL_INSTANCE(INSTANCE) ((INSTANCE) == CAN1)
 
 /******************************** COMP Instances ******************************/

@@ -1560,7 +1560,7 @@ extern "C" {
   * @}
   */
 
-/** @defgroup HAL_CAN_Aliased_Defines HAL CAN1 Aliased Defines maintained for legacy purpose
+/** @defgroup HAL_CAN_Aliased_Defines HAL CAN Aliased Defines maintained for legacy purpose
   * @{
   */
 #define CAN_FilterFIFO0             CAN_FILTER_FIFO0
