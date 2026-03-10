@@ -38,4 +38,4 @@ f042600/task.o: ..\User\Task\task.cpp ..\User\Task\task.h \
   ..\User\Middleware\Algorithm\alg_power_limit.h \
   ..\User\Task\dvc_as5600_3.h ..\Core\Inc\i2c.h ..\Core\Inc\gpio.h \
   ..\User\Device\dvc_ma600_spi.h ..\Core\Inc\spi.h \
-  ..\User\Task\alg_filter.h
+  ..\User\Task\alg_filter.h ..\Core\Inc\can.h

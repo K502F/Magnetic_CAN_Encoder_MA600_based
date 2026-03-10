@@ -12,6 +12,7 @@
 #include "alg_filter.h"
 #include <stdlib.h>
 #include <math.h>
+#include "can.h"
 #define HW_VERSION 12   //硬件版本。1.1指带有AS5600那版（记为11，其他版本依次类推）
 #define MAGNET_SURFACE_GAUSS 4000 //磁环表磁强度（单位：高斯）
 Class_Encoder_MA600 ma600;
@@ -76,6 +77,18 @@ int16_t Multi_Rad_16;
 float as5600_Angle;
 uint8_t as5600_Status;
 uint16_t as5600_Magnitude;
+
+void callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)//CAN接收数据回调，此处不用
+{
+    switch (CAN_RxMessage->Header.StdId)
+    {
+    case (0x4A):   
+    {
+        
+    }
+	break;
+	}
+}
 void Task1ms_TIM2_Callback()
 {
 
@@ -145,19 +158,19 @@ void Task1ms_TIM2_Callback()
         //统一打包发送
 	HAL_IWDG_Refresh(&hiwdg);//喂狗
     TIM_CAN_PeriodElapsedCallback();
-}
-
-void callback(Struct_CAN_Rx_Buffer *CAN_RxMessage)//CAN接收数据回调，此处不用
-{
-    switch (CAN_RxMessage->Header.StdId)
-    {
-    case (0x4A):   
-    {
-        
-    }
-	break;
+	if((hcan.Instance->ESR)>0XFF0000){
+		//bus offed
+		__disable_irq();
+	__HAL_RCC_CAN1_FORCE_RESET();
+		HAL_Delay(10);
+	__HAL_RCC_CAN1_RELEASE_RESET();
+		MX_CAN_Init();
+		 CAN_Init(&hcan,callback);
+		__enable_irq();
 	}
 }
+
+
 void CAN_ID_Init(){
 	#if HW_VERSION == 12
 	HAL_GPIO_WritePin(GPIOA,GPIO_PIN_3,GPIO_PIN_SET);
